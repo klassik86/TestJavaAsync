@@ -1,15 +1,18 @@
 package com.kk.helpers;
 
-import static com.kk.helpers.LoggerHelper.print;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ThreadHelper {
 
+    private static final Logger logger = LoggerFactory.getLogger(ThreadHelper.class);
+
     public static void sleep(String threadName, String label, Long time) {
         try {
-            print(">> " + label + " > before sleep - " + threadName);
+            logger.debug(">> " + label + " > before sleep - " + threadName);
             long millis = time;
             Thread.sleep(millis);
-            print("<< " + label + " < after sleep - " + threadName);
+            logger.debug("<< " + label + " < after sleep - " + threadName);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -1,12 +1,16 @@
 package com.kk.async;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static com.kk.helpers.LoggerHelper.print;
 import static com.kk.helpers.ThreadHelper.sleep;
 
 public class CompletionStageTest2 {
+
+    private static final Logger logger = LoggerFactory.getLogger(CompletionStageTest2.class);
 
     public static void main(String[] args) {
 
@@ -55,7 +59,7 @@ public class CompletionStageTest2 {
 
     private CompletionStage<String> getAsyncCompletionStage(String value, long sleepTime) {
         return CompletableFuture.supplyAsync(() -> {
-            print(">> getAsyncCompletionStage: " + value);
+            logger.debug(">> getAsyncCompletionStage: " + value);
             sleep("", value, sleepTime);
             return value;
         });

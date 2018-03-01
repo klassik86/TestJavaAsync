@@ -1,24 +1,28 @@
 package com.kk.async;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 
-import static com.kk.helpers.LoggerHelper.print;
 import static com.kk.helpers.ThreadHelper.sleep;
 
 // TODO: (padudin) rename 
 public class CompletionStageTest1 {
 
+    private static final Logger logger = LoggerFactory.getLogger(CompletionStageTest1.class);
+
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         CompletionStageTest1 test = new CompletionStageTest1();
 //        test.start1();
-//        test.start2SeqAsync();
+        test.start2SeqAsync();
 //        test.start2SplitAsync();
 //        test.start2SeqSync();
 //        test.start2SplitSync();
-        test.start2SplitDoubleInnerRunAsync();
-        print("exit");
+//        test.start2SplitDoubleInnerRunAsync();
+        logger.debug("exit");
     }
     
     private void start2SeqAsync() {
@@ -49,7 +53,7 @@ public class CompletionStageTest1 {
         Tue Feb 27 12:38:21 GST 2018: [main] exit
 
         * */
-        print(">> start2SeqAsync");
+        logger.debug(">> start2SeqAsync");
 
         CompletableFuture.completedFuture(null)
                 .thenCompose(unused -> asyncStage("1"))
@@ -57,7 +61,7 @@ public class CompletionStageTest1 {
                 .thenCompose(unused -> asyncStage("3"))
         .toCompletableFuture().join();
 
-        print("-----------");
+        logger.debug("-----------");
 
         CompletableFuture<String> future = CompletableFuture.completedFuture(null)
                 .thenCompose(unused -> asyncStage("1"))
@@ -65,10 +69,10 @@ public class CompletionStageTest1 {
                 .thenCompose(unused -> asyncStage("3"));
 
         sleep("join", "join", 5000L);
-        print("before join");
+        logger.debug("before join");
         future.toCompletableFuture().join();
 
-        print("<< start2SeqAsync");
+        logger.debug("<< start2SeqAsync");
     }
 
     private void start2SplitAsync() {
@@ -93,20 +97,20 @@ public class CompletionStageTest1 {
 
         * */
 
-        print(">> start2SplitAsync");
+        logger.debug(">> start2SplitAsync");
 
         CompletionStage<String> asyncStage1 = asyncStage("1");
         CompletionStage<String> asyncStage2 = asyncStage("2");
         CompletionStage<String> asyncStage3 = asyncStage("3");
 
         sleep("join", "join", 5000L);
-        print("before join");
+        logger.debug("before join");
         asyncStage1
                 .thenCompose(unused -> asyncStage2)
                 .thenCompose(unused -> asyncStage3)
         .toCompletableFuture().join();
 
-        print("<< start2SplitAsync");
+        logger.debug("<< start2SplitAsync");
         // TODO: (padudin) проверить что на вход футуры будет подаваться результат другой футуры?
     }
 
@@ -139,23 +143,23 @@ public class CompletionStageTest1 {
         Tue Feb 27 12:32:31 GST 2018: [main] exit
         * */
 
-        print(">> start2SeqSync");
+        logger.debug(">> start2SeqSync");
 
         syncStage("1")
                 .thenCompose(unused -> syncStage("2"))
                 .thenCompose(unused -> syncStage("3"))
                 .toCompletableFuture().join();
 
-        print("-----------");
+        logger.debug("-----------");
         CompletionStage<String> future = syncStage("1")
                 .thenCompose(unused -> syncStage("2"))
                 .thenCompose(unused -> syncStage("3"));
 
         sleep("join", "join", 5000L);
-        print("before join");
+        logger.debug("before join");
         future.toCompletableFuture().join();
 
-        print("<< start2SeqSync");
+        logger.debug("<< start2SeqSync");
     }
 
 
@@ -184,19 +188,19 @@ public class CompletionStageTest1 {
         Tue Feb 27 12:48:14 GST 2018: [main] exit
         * */
 
-        print(">> start2SplitSync");
+        logger.debug(">> start2SplitSync");
         CompletionStage<String> syncStage1 = syncStage("1");
         CompletionStage<String> syncStage2 = syncStage("2");
         CompletionStage<String> syncStage3 = syncStage("3");
 
         sleep("join", "join", 5000L);
-        print("before join");
+        logger.debug("before join");
         syncStage1
                 .thenCompose(unused -> syncStage2)
                 .thenCompose(unused -> syncStage3)
                 .toCompletableFuture().join();
 
-        print("<< start2SplitSync");
+        logger.debug("<< start2SplitSync");
 
         // TODO: (padudin) если убрать join - продемонстрировать , если буду оформлять.
     }
@@ -225,18 +229,18 @@ public class CompletionStageTest1 {
         Tue Feb 27 13:24:29 GST 2018: [main] exit
         * */
 
-        print(">> start2SplitDoubleInnerRunAsync");
+        logger.debug(">> start2SplitDoubleInnerRunAsync");
 
         CompletionStage<Void> asyncStage1 = asyncDoubleInnerSeqRunStage("1");
         CompletionStage<Void> asyncStage2 = asyncDoubleInnerSeqRunStage("2");
 
         sleep("join", "join", 5000L);
-        print("before join");
+        logger.debug("before join");
         asyncStage1
                 .thenCompose(unused -> asyncStage2)
                 .toCompletableFuture().join();
 
-        print("<< start2SplitDoubleInnerRunAsync");
+        logger.debug("<< start2SplitDoubleInnerRunAsync");
     }
 
     /*
