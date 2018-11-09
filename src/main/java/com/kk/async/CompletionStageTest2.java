@@ -32,7 +32,8 @@ public class CompletionStageTest2 {
 
         CompletableFuture.completedFuture(null)
                 .thenCompose(unused -> {
-                    return getAsyncCompletionStage("chunk 1", 2000L); // вот тут случайно вызываем метод который возвращает CompletionStage и все как бы будет хорошо и без ошибок, но с последствиями
+                    return getAsyncCompletionStage("chunk 1", 2000L); // вот тут случайно вызываем метод который возвращает CompletionStage,
+                    // поскольку используем thenCompose, чейнинг отрабатывает нормально, второй футур ждет первый
                 })
                 .thenCompose(unused -> getAsyncCompletionStage("chunk 2", 500L))
                 .toCompletableFuture().join();
@@ -50,7 +51,7 @@ public class CompletionStageTest2 {
         * */
 
         CompletableFuture.completedFuture(null)
-                .thenApply(unused -> {
+                .thenApply(unused -> {  /*thenApply сделал CompletionStage<СompletionStage<String>>, поскольку тот CompletionStage что внутри никто join`ом не вызывает, гарантировать что он закончит работу нельзя*/
                     return getAsyncCompletionStage("chunk 1", 2000L); // вот тут случайно вызываем метод который возвращает CompletionStage и все как бы будет хорошо и без ошибок, но с последствиями
                 })
                 .thenCompose(unused -> getAsyncCompletionStage("chunk 2", 500L))

@@ -17,11 +17,11 @@ public class CompletionStageTest1 {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         CompletionStageTest1 test = new CompletionStageTest1();
 //        test.start1();
-        test.start2SeqAsync();
+//        test.start2SeqAsync();
 //        test.start2SplitAsync();
 //        test.start2SeqSync();
 //        test.start2SplitSync();
-//        test.start2SplitDoubleInnerRunAsync();
+        test.start2SplitDoubleInnerRunAsync();
         logger.debug("exit");
     }
     
